@@ -1,0 +1,60 @@
+------launch instance------
+iam  ----> create ima user --->attached police---> click on user----> create acess key----> secret key
+https://developer.hashicorp.com/terraform/install#windows
+https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance
+
+
+
+
+
+vim main.tf 
+resource "aws_instance" "papiya" {
+  ami           = "ami-05fa46471b02db0ce"
+  instance_type = "t2.micro"
+  key_name = "lambda-key"
+
+  tags = {
+    Name = "hello world"
+  }
+}
+resource "aws_instance" "riya" {
+    ami           = "ami-05fa46471b02db0ce"
+    instance_type = "t2.micro"
+    key_name  = "lambda-key"
+
+    tags = {
+      Name = "hello world"
+    }
+}
+resource "aws_instance" "pooja" {
+      ami           = "ami-05fa46471b02db0ce"
+      instance_type = "t2.micro"
+      key_name  = "lambda-key"
+
+      tags = {
+        Name = "hello world"
+     }
+}
+
+
+provider.tf 
+
+terraform {
+  required_providers {
+    aws = {
+      source = "hashicorp/aws"
+      version = "5.80.0"
+    }
+  }
+}
+
+ provider "aws" {
+   region = "ap-south-1"
+
+}
+
+t init
+t plan
+t apply 
+t destory
+ 

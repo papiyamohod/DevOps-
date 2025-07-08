@@ -1,0 +1,58 @@
+----vpc-->create 2 public subnet-->useing variable file*****
+
+resource "aws_vpc" "fan" {
+  cidr_block       = "10.0.0.0/16"
+
+  tags = {
+    Name = "f-vpc"
+  }
+}
+#subnet
+resource "aws_subnet" "a" {
+  count = length(var.public_subnet_cidr)
+  vpc_id     = aws_vpc.fan.id
+  cidr_block = element(var.public_subnet_cidr, count.index)
+
+  tags = {
+    Name = "pu-sub"
+  }
+}
+#rout
+resource "aws_route_table" "p-rt" {
+  vpc_id = aws_vpc.fan.id
+
+
+ route   {
+         cidr_block = "0.0.0.0/0"
+         gateway_id = aws_internet_gateway.gw.id
+   }
+  tags = {
+    Name = "rt-pu"
+  }
+}
+#subnet acc
+resource "aws_route_table_association" "sub-pu" {
+  count = length(var.public_subnet_cidr)
+  subnet_id      = aws_subnet.a[count.index].id
+  route_table_id = aws_route_table.p-rt.id
+}
+#igw
+resource "aws_internet_gateway" "gw" {
+  vpc_id = aws_vpc.fan.id
+
+  tags = {
+    Name = "main-igw"
+  }
+}
+
+
+
+***************varfile************
+variable "vpc_fan"{
+ type = string
+ default = "10.0.0.0/16"
+}
+
+variable "public_subnet_cidr"{
+default = ["10.0.1.0/24", "10.0.2.0/24","10.0.3.0/24"]
+} 

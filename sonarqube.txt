@@ -1,0 +1,8 @@
+docker install 
+sysrt enable 
+sudo docker pull sonarqube
+sudo docker run -d -P sonarqube
+sudo docker ps -a
+rum no 37
+secur all traffic 
+sonar admin admin 

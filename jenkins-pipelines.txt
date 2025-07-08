@@ -1,0 +1,50 @@
+----------jenkins------------
+$sudo wget -O /etc/yum.repos.d/jenkins.repo \
+>     https://pkg.jenkins.io/redhat-stable/jenkins.repo
+$sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+$sudo dnf upgrade
+$sudo yum install java-17 -y
+$sudo dnf install fontconfig
+$sudo dnf install jenkins
+$sudo systemctl daemon-reload
+$sudo systemctl start jenkins
+$sudo systemctl enable jenkins
+$sudo systemctl status jenkins
+$sudo yum install docker -y
+$sudo yum install git -y
+$sudo systemctl start docker
+$sudo systemctl enable docker
+$copy IP and go to web and upload like {this=(172.0.0.0:8080)}
+--copy key and upload in key section---
+go to New Item
+Enter an item name (give any name) ----> click pipeline----> ok----> scorldown-->and go to script
+
+pipeline {
+    agent any
+    stages {
+        stage('git checkout') {
+            steps {
+                checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/Pritam-Khergade/student-ui.git']])
+            }
+        }
+        stage('build') {
+            steps {
+                sh 'sudo docker build -t ganpati .'
+            }
+        }
+        stage('ecr push') {
+            steps {
+                sh '''
+                aws ecr get-login-password --region ap-southeast-2 | sudo docker login --username AWS --password-stdin 529088278501.dkr.ecr.ap-southeast-2.amazonaws.com
+                sudo docker tag ganpati:latest 529088278501.dkr.ecr.ap-southeast-2.amazonaws.com/ganpati:latest
+                sudo docker push 529088278501.dkr.ecr.ap-southeast-2.amazonaws.com/ganpati:latest
+                '''
+            }
+        }
+        
+    }
+} 
+
+click Apply
+click save
+click at ones Build Now

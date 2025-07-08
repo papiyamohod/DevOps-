@@ -1,0 +1,45 @@
+***************s3 bucket in terraform*************
+
+sudo yum install -y yum-utils shadow-utils
+sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
+sudo yum -y install terraform
+apt install unzip   --->ubuntu
+
+main.tf files
+resource "aws_s3_bucket" "a"{
+ count = var.bucket_count
+ bucket = "priyabucket-${count.index + 1}"
+}
+
+
+var.tf file
+variable "bucket_count" {
+    description = "number of  s3 bucket  to create"
+    type = number
+    default = 5
+}
+
+provider.tf file
+
+terraform {
+  required_providers {
+    aws = {              
+      source = "hashicorp/aws"
+      version = "5.85.0"
+    }
+  }
+}
+
+provider "aws" {
+  # Configuration options
+  region = "ap-southeast-2"
+  access_key = "your access-key"
+  secret_key = "secrete-key"
+} 
+
+terraform init
+terraform apply
+terraform plan
+terraform destory
+
+

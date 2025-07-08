@@ -1,0 +1,54 @@
+What is docker-Compose?
+--->a tool that helps to run multi-container applications on Docker.Spin up & spin down
+#sudo yum install docker -y
+#sudo systemctl start docker
+#sudo systemctl enable docker 
+#sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose 
+#sudo chmod +x /usr/local/bin/docker-compose
+#docker-compose --version 	
+#vim docker-compose.yaml
+version: '3'
+services:
+  app:
+    image: 'nginx'
+    ports:
+       - "80:80"
+#sudo docker-compose up -d
+#sudo docker-compose down
+#vim docker-compose.yaml
+version: '3'
+services:
+  app:
+    image: 'nginx'
+    ports:
+      - "80:80"
+  web:
+    image: 'httpd'
+    ports:
+      - "8080:80"
+#sudo docker-compose up -d
+#sudo docker-compose down
+version: '3'
+services:
+  app:
+    image: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - myvol:/usr/share/nginx/html
+  web:
+    image: httpd
+    ports:
+       - "8080:80"
+  tomcat:
+      image: pritamkhergade/cdecb34-35:mighty-raju
+      ports:
+       - "8081:8080"
+
+volumes:
+  myvol:
+#sudo docker-comopse up -d
+
+YAML Lint 
+
+ 

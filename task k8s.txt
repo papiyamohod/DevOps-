@@ -1,0 +1,167 @@
+docker image nginx free css template built and deploy on k8s microservice 1 deployment 
+microservice 2 --->httpd make container (deployment) index.html yiv configemap
+microserivice 3 tomcat all 3 deployed in  3 diff namesapce 
+nginx ---> dev -f naginx 
+httpd ----> dev -f httpd 
+namespace ---. dev -f tomacat 
+implement nginx ingress controller on top of it it will be deploy in nginx namespace all three will have three diff int point on 3 nodes 
+1  pod  --> nginx 
+2  pod  --> httpd 
+3  pod   ---> namespace
+
+task 2 --->noad affinity  read this all
+entire affinity 
+node selector
+pod affinity
+tint and tollarance
+
+task 1 microservice 1===>
+setup project directory
+
+mkdir nginx-website
+cd nginx-website
+
+get a free css template
+curl -L -O https://html5up.net/uploads/demos/solid-state.zip
+unzip solid-state.zip
+
+create dockerfile 
+# Use the official NGINX image from Docker Hub
+FROM nginx:alpine
+
+# Copy the template files into the NGINX server's root directory
+COPY . /usr/share/nginx/html
+
+# Expose port 80 to the outside world
+EXPOSE 80
+
+build the docker image
+    
+docker build -t nginx-website .
+
+test the image locally
+
+docker run -d -p 8080:80 nginx-website
+
+push the image to docker hub
+docker login
+docker tag nginx-website yourusername/nginx-website  (yourusername---dockerhub)
+docker push yourusername/nginx-website
+
+create k8s deployment yaml
+nginx-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: yourusername/nginx-website
+        ports:
+        - containerPort: 80
+
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+spec:
+  selector:
+    app: nginx
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: LoadBalancer
+
+
+deploy to k8s
+
+apply the yaml file to create the deployment in k8
+
+kubectl apply -f nginx-deployment.yaml
+
+
+check the stats of your pods and service
+
+kubectl get pods
+kubectl get svc
+
+configure the web host 
+
+docker pull yourusername/nginx-website
+docker run -d -p 80:80 yourusername/nginx-website
+
+
+
+ sudo docker ps
+    2  sudo docker exec -it 9094 bash
+    3  ls
+    4  rm -rvf dockerfile  deploy.yaml  service.yaml
+    5  ls
+    6  vim dockerfile
+    7  docker build -t nginx-free-css-template .
+    8  sudo docker build -t nginx-free-css-template .
+    9  docker run -d -p 8080:80 nginx-free-css-template
+   10  sudo docker run -d -P  nginx-free-css-template
+   11  sudo docker login
+   12  sudo docker tag nginx-free-css-template papiya205/nginx-free-css-template:latest
+   13  sudo docker push papiya205/nginx-free-css-template:latest
+   14  ls
+   15  vim nginx-deployment.yaml
+   16  k apply -f nginx-deployment.yaml
+   17  kubectl apply -f nginx-deployment.yaml
+   18  vim nginx-deployment.yaml
+   19  kubectl apply -f nginx-deployment.yaml
+   20  ls
+   21  vim nginx-deployment.yaml
+   22  kubectl apply -f nginx-deployment.yaml
+   23  vim nginx-deployment.yaml
+   24  kubectl apply -f nginx-deployment.yaml
+   25  vim nginx-deployment.yaml
+   26  kubectl apply -f nginx-deployment.yaml
+   27  vim apiVersion: apps/v1
+   28  vim nginx-service.yaml
+   29  apiVersion: v1
+   30  kind: Service
+   31  metadata:
+   32    name: nginx-service
+   33  spec:
+   34    selector:
+   35      app: nginx
+   36    ports:
+   37      - protocol: TCP
+   38        port: 80
+   39        targetPort: 80
+   40    type: LoadBalancer
+   41  kubectl apply -f nginx-service.yaml
+   42  vim nginx-service.yaml
+   43  kubectl apply -f nginx-service.yaml
+   44  kubectl get deployments
+   45  kubectl get pods
+   46  kubectl get services
+   47  ls
+   48  kubectl apply -f nginx-service.yaml
+   49  kubectl get pod
+   50  kubectl get svc
+   51  kubectl scale deployment nginx-deployment --replicas=1
+   52  kubectl get svc
+   53  kubectl set image deployment/nginx-deployment nginx=yourusername/nginx-free-css-template:newtag
+   54  sudo docker ps
+
+
+
+
+
