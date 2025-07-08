@@ -1,0 +1,38 @@
+---Jenkins--
+
+$Launch instance 2, one is master & second is slaves, give them permission
+
+1)master--->Addmin Access
+
+2)Slaves--->ECR full Access
+
+3)Go to security group--->inbound rule---> add 8080 port
+
+**************************************************************
+
+
+
+1)Master EC2- instance
+
+Do ssh and then change Host-Name command sudo hostnamectl set-hostname (any name ex:-master) 
+
+1)install java-17----> 2)jenkins----> 3)git 
+
+Copy instance IP hit in web browser (like this 172.0.0.0:8080)
+*******************************-****************
+
+2)slaves EC2- instance
+
+Do ssh and then change Host-Name command sudo hostnamectl set-hostname (any name ex:-slaves)
+
+1)install java-17---> 2)git--->3)docker
+
+*****************************************************************
+
+----------Go to--------jenkins GUI------------
+
+Dashboard----->ManageJenkins--->nodes---->New Node--(any name) create-->Number of executors 1-->root(/home/ec2-user)-->Labels (slave)
+Usage ----->Launch method(ssh)---> save
+
+after create nodes then check its runing or not  if run lod show mass like this-{Agent successfully connected and online}
+Go to New item create pipeline and create pipeline syntax and write your script and apply save
