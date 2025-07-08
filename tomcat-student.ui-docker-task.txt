@@ -1,0 +1,29 @@
+***Task 1***
+1)Create docker images of Amazonlinux add tomcat and student-ui?
+
+sudo yum install docker -y
+sudo systemctl start docker
+sudo systemctl enable docker 
+sudo yum install git -y
+git clone "sir repo"
+curl -O https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.100/bin/apache-tomcat-9.0.100.zip
+unzip  apache-tomcat-9.0.100.zip
+mv apache-tomcat-9.0.100 tomcat ------>rename
+vim Dockerfile
+
+ FROM amazonlinux
+ RUN yum update && yum install java-17 -y && yum install maven -y
+ COPY tomcat /tomcat/.
+ RUN chmod 777 tomcat/bin/catalina.sh
+ EXPOSE 8080
+ COPY student-ui /student-ui/.
+ WORKDIR /student-ui/
+ RUN mvn clean package
+ RUN mv target/*.war /tomcat/webapps/studentapp.war ---------------------->give any name 
+ CMD ["/tomcat/bin/catalina.sh","run"]
+
+sudo docker build -t task1 .
+sudo docker images
+sudo docker run -d -P task1
+Hit ip on 10.0.0.0:32768 ------------->for tomcat
+Hit ip on 10.0.0.0:32768/studentapp ---------------> for student-ui
