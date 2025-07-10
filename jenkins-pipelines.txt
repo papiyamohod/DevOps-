@@ -18,6 +18,8 @@ $copy IP and go to web and upload like {this=(172.0.0.0:8080)}
 --copy key and upload in key section---
 go to New Item
 Enter an item name (give any name) ----> click pipeline----> ok----> scorldown-->and go to script
+for admin password --> sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+
 
 pipeline {
     agent any
